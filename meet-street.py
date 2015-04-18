@@ -15,29 +15,35 @@ if not app.config['DEBUG']:
   app.logger.setLevel(logging.WARNING)
   app.logger.addHandler(file_handler)
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
-  return render_template('index.html')
-
-@app.route('/page')
-def page():
-  return render_template('page.html')
-
-@app.route('/maps')
-def maps():
-  addresses = ["UNSW", "Wynyard+Sydney", "Burwood+Sydney", "Chatswood"]
-  coords = []
-  for addr in addresses:
-    coords.append(getCoordinates(addr))
-  coords = getConvexHullPoints(coords)
-  centroid = findMidpoint(coords)
-  locations = getPointsOfInterest(centroid[0], centroid[1])
-  # Only return top 4 results
-  locations = locations[:4]
-  for location in locations:
-    location["details"] = getDetails(location["place_id"])
-  zoom = getZoomLevel(shortestDistance(coords))
-  return render_template('maps.html', coords=coords, locations=locations, centroid=centroid, zoom=zoom)
+  if request.method == 'POST':
+    addresses = request.form.getlist("address[]")
+    addresses = sanitizeAddresses(addresses)
+    print addresses
+    coords = []
+    for addr in addresses:
+      if len(addr.split(',')) == 2:
+        try:
+          lat = float(addr.split(',')[0])
+          lng = float(addr.split(',')[1])
+          coords.append([lat, lng])
+          continue
+        except ValueError:
+          pass
+      coords.append(getCoordinates(addr))
+    print coords  
+    coords = getConvexHullPoints(coords)
+    centroid = findMidpoint(coords)
+    locations = getPointsOfInterest(centroid[0], centroid[1])
+    # Only return top 4 results
+    locations = locations[:4]
+    for location in locations:
+      location["details"] = getDetails(location["place_id"])
+    zoom = getZoomLevel(shortestDistance(coords))
+    return render_template('maps.html', coords=coords, locations=locations, centroid=centroid, zoom=zoom)
+  else:
+    return render_template('index.html')
 
 @app.route('/form', methods=['POST', 'GET'])
 def form():
