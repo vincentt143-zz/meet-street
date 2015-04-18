@@ -1,17 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Simple Polygon</title>
-    <style>
-      html, body, #map-canvas {
-        height: 100%;
+{% extends "layout.html" %}
+{% block title %} Results {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
+<style>
+    #map-canvas {
+        height: 400px;
         margin: 0px;
         padding: 0px
     }
 </style>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true"></script>
 <script>
     // This example creates a simple polygon representing the Bermuda Triangle.
 
@@ -53,7 +52,7 @@
             var lat = {{ location["geometry"]["location"]["lat"] }};
             var lng = {{ location["geometry"]["location"]["lng"] }};
             var contentString = '<div class="content">' +
-                                '<h2>{{ location["details"]["form"] }}</h2>' +
+                                '<h2>{{ location["details"]["name"] }}</h2>' +
                                 '<p>{{ location["details"]["formatted_address"] }}</p>' +
                                 '<p>{{ location["details"]["formatted_phone_number"] }}</p>';
             {% if "opening_hours" in location["details"] %}
@@ -93,8 +92,5 @@
     google.maps.event.addDomListener(window, 'load', initialize);
 
 </script>
-</head>
-<body>
-    <div id="map-canvas"></div>
-</body>
-</html>
+<div id="map-canvas"></div>
+{% endblock %}

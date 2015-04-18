@@ -2,6 +2,13 @@ import json, urllib2, math
 from numpy import *
 from scipy.spatial import ConvexHull
 
+def sanitizeAddresses(addresses):
+  i = 0
+  while i < len(addresses):
+    addresses[i] = addresses[i].replace(" ", "+")
+    i += 1
+  return addresses
+
 def getCoordinates(address):
   response = urllib2.urlopen("http://maps.googleapis.com/maps/api/geocode/json?address=" + address).read()
   response = json.loads(response)
