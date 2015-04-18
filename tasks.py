@@ -18,12 +18,8 @@ def getPointsOfInterest(lat, lng, type, radius = "500m"):
   response = json.loads(response)
   for poi in response["results"]:
     poi["dist"] = (poi["geometry"]["location"]["lat"] - lat)**2 + (poi["geometry"]["location"]["lng"] - lng)**2
-  response = sortPointsOfInterest(response["results"])
+  response = sorted(response["results"], key=lambda location: location["dist"])
   return response
-
-def sortPointsOfInterest(locations):
-  return sorted(locations, key=lambda location: location["dist"])
-
 
 def findMidpoint(coordinates):
   numCoords = 0.0
@@ -45,3 +41,7 @@ def findMidpoint(coordinates):
     Yaverage = totalY/numCoords
   midpoint = [Xaverage, Yaverage]
   return midpoint
+
+# getLocationName(-33.9174103,151.2313068)
+getPointsOfInterest(-33.8670522, 151.1957362, "food", 500)
+# location=-33.8670522,151.1957362&radius=500&types=food&name=cruise
