@@ -24,23 +24,17 @@ def getPointsOfInterest(lat, lng, type, radius = "500m"):
   return response
 
 def findMidpoint(coordinates):
-  numCoords = 0.0
+  numCoords = 0
   totalX = 0.0
   totalY = 0.0
   Xaverage = 0.0
   Yaverage = 0.0
-  isX = True
   for coord in coordinates:
-    if(isX == True):
-      totalX = totalX + coord
-      isX = False
-    else:
-      totalY = totalY + coord
-      isX = True
-      numCoords = numCoords + 1
-  if(numCoords > 0):
-    Xaverage = totalX/numCoords
-    Yaverage = totalY/numCoords
+    totalX = totalX + coord[0]
+    totalY = totalY + coord[1]
+    numCoords = numCoords + 1
+  Xaverage = totalX/numCoords
+  Yaverage = totalY/numCoords
   midpoint = [Xaverage, Yaverage]
   return midpoint
 
