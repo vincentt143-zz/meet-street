@@ -1,1 +1,1 @@
-web: python main.py -i json-rpc
+web: gunicorn meet-street:app --log-file=-
