@@ -4,7 +4,17 @@ import urllib2
 def getCoordinates(address):
   response = urllib2.urlopen("http://maps.googleapis.com/maps/api/geocode/json?address=" + address).read()
   response = json.loads(response)
-  return [response["results"][0]["geometry"]["location"]["lat"], response["results"][0]["geometry"]["location"]["lng"]] 
+  return [response["results"][0]["geometry"]["location"]["lat"], response["results"][0]["geometry"]["location"]["lng"]]
+
+def getLocationName(lat, lng):
+  response = urllib2.urlopen("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(lat) + "," + str(lng)).read()
+  response = json.loads(response)
+  return response["results"][0]["formatted_address"]
+
+def getPointsOfInterest(location):
+  response = urllib2.urlopen("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(lat) + "," + str(lng)).read()
+  response = json.loads(response)
+  return response["results"][0]["formatted_address"]  
 
 def findMidpoint(coordinates):
   numCoords = 0.0
@@ -26,3 +36,5 @@ def findMidpoint(coordinates):
     Yaverage = totalY/numCoords
   midpoint = [Xaverage, Yaverage]
   return midpoint
+
+getLocationName(-33.9174103,151.2313068)
