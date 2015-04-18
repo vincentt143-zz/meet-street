@@ -81,7 +81,7 @@ def getZoomLevel(shortest):
   lengthDisplayed = 40075
   while(lengthDisplayed > toDisplay):
     zoomLevel += 1
-    lengthDisplayed = lengthDisplayed**(1/2)
+    lengthDisplayed = lengthDisplayed/2
   zoomLevel -= 1
   return zoomLevel
 
