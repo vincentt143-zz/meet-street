@@ -32,7 +32,8 @@ def maps():
   locations = locations[:4]
   for location in locations:
     location["details"] = getDetails(location["place_id"])
-  return render_template('maps.html', coords=coords, locations=locations, centroid=centroid)
+  zoom = getZoomLevel(shortestDistance(coords))
+  return render_template('maps.html', coords=coords, locations=locations, centroid=centroid, zoom=zoom)
 
 @app.route('/form', methods=['POST', 'GET'])
 def form():
