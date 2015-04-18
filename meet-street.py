@@ -20,7 +20,6 @@ def index():
   if request.method == 'POST':
     addresses = request.form.getlist("address[]")
     addresses = sanitizeAddresses(addresses)
-    print addresses
     coords = []
     for addr in addresses:
       if len(addr.split(',')) == 2:
@@ -32,7 +31,6 @@ def index():
         except ValueError:
           pass
       coords.append(getCoordinates(addr))
-    print coords  
     coords = getConvexHullPoints(coords)
     centroid = findMidpoint(coords)
     locations = getPointsOfInterest(centroid[0], centroid[1])
