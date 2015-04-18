@@ -11,10 +11,20 @@ def getLocationName(lat, lng):
   response = json.loads(response)
   return response["results"][0]["formatted_address"]
 
-def getPointsOfInterest(location):
-  response = urllib2.urlopen("https://maps.googleapis.com/maps/api/geocode/json?latlng=" + str(lat) + "," + str(lng)).read()
+
+
+def getPointsOfInterest(lat, lng, type, radius = "500m"):
+  response = urllib2.urlopen("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + str(lat) + "," + str(lng) + "&radius=" + str(radius) + "&types=" + type + "&key=AIzaSyDdrdJXlBA9SvDFpV2ySAS0RkUvaGb7lAU").read()
   response = json.loads(response)
-  return response["results"][0]["formatted_address"]  
+  for poi in response["results"]:
+    poi["dist"] = (poi["geometry"]["location"]["lat"] - lat)**2 + (poi["geometry"]["location"]["lng"] - lng)**2
+  response = sortPointsOfInterest(response["results"])
+  print response
+  return response
+
+def sortPointsOfInterest(locations):
+  return sorted(locations, key=lambda location: location["dist"])
+
 
 def findMidpoint(coordinates):
   numCoords = 0.0
@@ -36,5 +46,3 @@ def findMidpoint(coordinates):
     Yaverage = totalY/numCoords
   midpoint = [Xaverage, Yaverage]
   return midpoint
-
-getLocationName(-33.9174103,151.2313068)
