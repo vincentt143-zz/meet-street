@@ -38,17 +38,52 @@ def findMidpoint(coordinates):
   midpoint = [Xaverage, Yaverage]
   return midpoint
 
-def closestDistanceToCenter(coordinates):
-  midpoint = findMidPoint(coordinates)
-  leastDistance = 0
-  for locations in coordinates:
-    x = locations[0] - midpoint[0]
-    y = locations[1] - midpoint[1]
-    distance = x**2 + y**2
-    if(distance < leastDistance):
-      leastDistance = distance
-  leastDistance = leastDistance**(1/2)
-  return leastDistance
+import math
+ 
+def shortestDistance(coords):
+  midpoint = findMidpoint(coords)
+  lat2 = midpoint[0]
+  long2 = midpoint[1]
+  # Convert latitude and longitude to
+  # spherical coordinates in radians.
+  degrees_to_radians = math.pi/180.0
+  shortest = 0
+  for coordinate in coords:
+    lat1 = coordinate[0]
+    long1 = coordinate[1]    
+    # phi = 90 - latitude
+    phi1 = (90.0 - lat1)*degrees_to_radians
+    phi2 = (90.0 - lat2)*degrees_to_radians
+          
+    # theta = longitude
+    theta1 = long1*degrees_to_radians
+    theta2 = long2*degrees_to_radians
+           
+    # Compute spherical distance from spherical coordinates.
+           
+    # For two locations in spherical coordinates
+    # (1, theta, phi) and (1, theta, phi)
+    # cosine( arc length ) =
+    #    sin phi sin phi' cos(theta-theta') + cos phi cos phi'
+    # distance = rho * arc length
+       
+    cos = (math.sin(phi1)*math.sin(phi2)*math.cos(theta1 - theta2) + math.cos(phi1)*math.cos(phi2))
+    arc = math.acos( cos )
+    #multiply by radius of earth in km
+    arc = arc*6378
+    if(arc < shortest):
+      shortest = arc   
+  return shortest
+
+def getZoomLevel(shortest):
+  toDisplay = shortest*2
+  zoomLevel = 0
+  lengthDisplayed = 40075
+  while(lengthDisplayed > toDisplay):
+    zoomLevel += 1
+    lengthDisplayed = lengthDisplayed**(1/2)
+  zoomLevel -= 1
+  return zoomLevel
 
 # getLocationName(-33.9174103,151.2313068)
 getPointsOfInterest(-33.8670522, 151.1957362, "food", 500)
