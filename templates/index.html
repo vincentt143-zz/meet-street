@@ -17,6 +17,9 @@
 
     <!-- Bootflat core CSS -->
     <link href="static/css/bootflat.css" rel="stylesheet">
+
+    <!-- Logo font -->
+    <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
   
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
     <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -88,20 +91,24 @@
 
     <div class="container-fluid" role="main">
 
+     <div class="row">
+       <div class="col-xs-12">
+         <h2 style="font-family: 'Pacifico', cursive; text-align: center;">Meetstreet</h2>
+      </div>
+     </div>
 
-      <div class="row">
-        <div class="col-lg-1">
-          <input class="form-control" id="inputName" >
+
+     <div class="row">
+        <div class="col-xs-12">
+          <input class="form-control" id="inputName" placeholder="Enter your friends' names or nicknames">
+          <input type="submit" id="submit" class="btn btn-primary" value="Add Friend">
         </div>
       </div>
-        
-      <div class="row">
-        <div class="col-lg-1">
-          <input type="submit" id="submit" class="btn btn-primary btn-block">
-
+      
+          
+<!--Hide submit button if friend name input field is empty - NOT WORKING-->
 <script>
 $(function(){
-    // Hide submit button if friend name input field is empty
     $('form input').keyup(function(){
         if($('#inputName').val() == ""){
             $('#submit').hide();
@@ -119,28 +126,38 @@ $(function(){
 });
 
 </script>
-          </div>
-      </div>
 
+
+<!--show box for one friend's name with options to input address-->
 <div class="row">
-          <div class="col-lg-1">
- <div class="alert alert-info alert-dismissable">
- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
- <div class="col-md-8"><strong>Jack Piper</strong></div>
-<div class="col-md-4">
-  <div class="row">
-  <a class="btn btn-primary btn-block" href="#">Place on map</a>
-</div>
- <div class="row">
- <a class="btn btn-primary btn-block" href="#">Enter address</a>     
+  <div class="col-xs-12">
+    <div class="alert alert-info alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+      <strong>Jack Piper</strong>
+   <a class="btn-primary btn-xs pull-right" href="#">Place on map</a>
+ <a class="btn-primary btn-xs pull-right" href="#">Enter address</a>    
  </div> 
 </div>
 </div>
 
+<!--text input for friend's address-->
 
+<div class="row">
+  <div class="col-xs-12">
+    <input class="form-control" id="inputName" placeholder="Enter the address your friend is coming from">
+    <input type="submit" id="textaddress" class="btn btn-primary" value="Add Address">
+  </div>
+</div>
 
+<!--Google map area-->
+<div class="row">
+  <div class="col-xs-12">
+    <div style="color:0;border-radius:15px;min-height:500px;">
+    </div>
+  </div>
+</div>
 
-    </div> <!-- /container -->
+</div> <!-- /container -->
 
 
     <!-- Bootstrap core JavaScript
