@@ -1,3 +1,11 @@
+import json
+import urllib2
+
+def getCoordinates(address):
+  response = urllib2.urlopen("http://maps.googleapis.com/maps/api/geocode/json?address=" + address).read()
+  response = json.loads(response)
+  return [response["results"][0]["geometry"]["location"]["lat"], response["results"][0]["geometry"]["location"]["lng"]] 
+
 def findMidpoint(coordinates):
   numCoords = 0.0
   totalX = 0.0
