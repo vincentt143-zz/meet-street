@@ -19,7 +19,6 @@ def getPointsOfInterest(lat, lng, type, radius = "500m"):
   for poi in response["results"]:
     poi["dist"] = (poi["geometry"]["location"]["lat"] - lat)**2 + (poi["geometry"]["location"]["lng"] - lng)**2
   response = sortPointsOfInterest(response["results"])
-  print response
   return response
 
 def sortPointsOfInterest(locations):
