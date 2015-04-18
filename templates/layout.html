@@ -1,0 +1,74 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    {% block head %}
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forte - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootflat.css') }}" />
+    <script src="{{ url_for('static', filename='js/modernizr.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/prototype.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cookiejar.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/application.js') }}"></script>
+    {% endblock %}
+  </head>
+  <body onload="checkCookie()">
+    <div class="wrapper">
+      <div class="row">
+        <div class="small-5 columns">
+          <a href="{{ url_for('index') }}"><h1>Forte</h1></a>
+        </div>
+        <div class="small-7 columns text-right show-for-small-only">
+          <a href="{{ url_for('new_playlist') }}" class="button tiny playListSmall">Create a Playlist</a>
+        </div>
+        <div class="small-7 columns text-right hide-for-small-only">
+          <a href="{{ url_for('new_playlist') }}" class="button tiny playListLarge">Create a Playlist</a>
+        </div>
+        <hr>
+      </div>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <ul class=flashes>
+          {% for category, message in messages %}
+            {% if category == "error" %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endif %}
+          {% endfor %}
+          </ul>
+        {% endif %}
+      {% endwith %}
+      {% block content %}
+      {% endblock %}
+
+      <div class="push"></div>
+    </div>
+    <div class="footer">
+      <div class="row">
+        <hr>
+        <div class="large-12 columns text-center">
+          <small>Forte by CSESoc Dev Team for Arc Yellow Shirts. &copy; 2013 CSESoc</small>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/foundation.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.tinysort.min.js') }}"></script>
+
+    <script>
+      var $j = jQuery.noConflict();
+      $j(document).foundation();
+      $j(document).foundation('abide', {
+        patterns: {
+          youtube: /^http:\/\/(?:www\.)?youtube.com\/watch\?(?=[^?]*v=\w+)(?:[^\s?]+)?$/
+        }
+      });
+    </script>
+    
+  </body>
+</html>
+Status API Training Shop Blog About
+© 2015 GitHub, Inc. Terms Privacy Security Contact
