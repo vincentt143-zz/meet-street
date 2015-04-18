@@ -1,5 +1,7 @@
 import json
 import urllib2
+from numpy import *
+from scipy.spatial import ConvexHull
 
 def getCoordinates(address):
   response = urllib2.urlopen("http://maps.googleapis.com/maps/api/geocode/json?address=" + address).read()
@@ -45,3 +47,14 @@ def findMidpoint(coordinates):
 # getLocationName(-33.9174103,151.2313068)
 getPointsOfInterest(-33.8670522, 151.1957362, "food", 500)
 # location=-33.8670522,151.1957362&radius=500&types=food&name=cruise
+
+#return a 1d array that has the first x, y, then the next x,y and then the next x,y counterclockwise
+
+def getConvexHullPoints(coordinates):
+  hull = ConvexHull(coordinates)
+  returnableCoordinates = []
+  hullVertices = hull.vertices
+  for index in hullVertices:
+    for coord in hull.points[index]:
+      returnableCoordinates.append(coord)
+  return returnableCoordinates

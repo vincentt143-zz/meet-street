@@ -4,6 +4,7 @@ meet-street
 ###Core packages
 ```
 $ sudo apt-get install git pip
+$ sudo apt-get install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose
 ```
 
 ###Setting up virtualenv
