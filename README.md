@@ -20,6 +20,8 @@ Run the following
 ```
 $ git clone git@github.com:vincentt143/meet-street.git
 $ cd meet-street
+$ echo "export MEET_STREET_CONFIG=development_config.py" >> ~/.bashrc
+$ bash
 $ pip install -r requirements.txt
 ```
 ### Running the server
