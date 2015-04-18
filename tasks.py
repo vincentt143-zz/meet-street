@@ -38,6 +38,18 @@ def findMidpoint(coordinates):
   midpoint = [Xaverage, Yaverage]
   return midpoint
 
+def closestDistanceToCenter(coordinates):
+  midpoint = findMidPoint(coordinates)
+  leastDistance = 0
+  for locations in coordinates:
+    x = locations[0] - midpoint[0]
+    y = locations[1] - midpoint[1]
+    distance = x**2 + y**2
+    if(distance < leastDistance):
+      leastDistance = distance
+  leastDistance = leastDistance**(1/2)
+  return leastDistance
+
 # getLocationName(-33.9174103,151.2313068)
 getPointsOfInterest(-33.8670522, 151.1957362, "food", 500)
 # location=-33.8670522,151.1957362&radius=500&types=food&name=cruise
