@@ -19,6 +19,10 @@ if not app.config['DEBUG']:
 def index():
   return render_template('index.html')
 
+@app.route('/page')
+def page():
+  return render_template('page.html')
+
 @app.route('/maps')
 def maps():
   addresses = ["UNSW", "Wynyard+Sydney", "Burwood+Sydney", "Chatswood"]
