@@ -1,172 +1,128 @@
+{% extends "layout.html" %}
+{% block title %} Home {% endblock %}
+{% block head %}
+    {{ super() }}
+{% endblock %}
+{% block content %}
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
-
-    <title>Meetstreet</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="static/css/bootstrap.css" rel="stylesheet">
-
-    <!-- Bootflat core CSS -->
-    <link href="static/css/bootflat.css" rel="stylesheet">
-
-    <!-- Logo font -->
-    <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-  
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script src="static/js/ie-emulation-modes-warning.js"></script>
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-  </head>
-
-  <body role="document" style="padding-top:70px; background-image:url("img/landscape.jpg");">
-
-    <!-- Fixed navbar -->
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Meetstreet</a>
-
-          <!--main function icon buttons - play, home, stats -->
-          <div class="navbar-right">
-          <button type="button" class="btn navbar-btn btn-info">
-                <i class="glyphicon glyphicon-flag">
-                </i>
-                <label class="sr-only">Play</label>
-              </button>
-              <button type="button" class="btn navbar-btn btn-info active">
-                <i class="glyphicon glyphicon-home">
-                </i>
-                <label class="sr-only">Home</label>
-              </button>
-              <button type="button" class="btn navbar-btn btn-info">
-                <i class="glyphicon glyphicon-signal">
-                </i>
-                <label class="sr-only">Stats</label>
-              </button>
-            </div>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-
-            <li class="active"></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li class="dropdown">
-            
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Settings <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li><a href="#">Action</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
-                <li class="divider"></li>
-                <li class="dropdown-header">Nav header</li>
-                <li><a href="#">Separated link</a></li>
-                <li><a href="#">One more separated link</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-
-    <div class="container-fluid" role="main">
-
-     <div class="row">
-       <div class="col-xs-12">
-         <h2 style="font-family: 'Pacifico', cursive; text-align: center;">Meetstreet</h2>
-      </div>
-     </div>
-
-
-     <div class="row">
-        <div class="col-xs-12">
-          <input class="form-control" id="inputName" placeholder="Enter your friends' names or nicknames">
-          <input type="submit" id="submit" class="btn btn-primary" value="Add Friend">
-        </div>
-      </div>
-      
-          
-<!--Hide submit button if friend name input field is empty - NOT WORKING-->
 <script>
-$(function(){
-    $('form input').keyup(function(){
-        if($('#inputName').val() == ""){
-            $('#submit').hide();
-        }
-        else {
-            $('#submit').show();
-        }
+    var map = null;
+    var marker = null;
+
+    var infowindow = new google.maps.InfoWindow({ 
+      size: new google.maps.Size(150,50)
     });
-    // Don't submit form if either field is empty
-    $('form').submit(function(){
-    if($('#1').val() == "" || $('#2').val() == ""){
-        return false;
+
+    // A function to create the marker and set up the event window function 
+    function createMarker(latlng, name, html) {
+        var contentString = html;
+        var marker = new google.maps.Marker({
+            position: latlng,
+            map: map,
+            zIndex: Math.round(latlng.lat()*-100000)<<5
+        });
+
+        google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(contentString); 
+            infowindow.open(map,marker);
+            });
+        google.maps.event.trigger(marker, 'click');    
+        return marker;
     }
+
+ 
+
+    function initialize() {
+        var myOptions = {
+          zoom: 4,
+          center: new google.maps.LatLng(-25.363882,131.044922),
+          mapTypeControl: true,
+          mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU},
+          navigationControl: true,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        }
+        map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
+     
+        google.maps.event.addListener(map, 'click', function() {
+            infowindow.close();
+        });
+
+        google.maps.event.addListener(map, 'click', function(event) {
+            //call function to create marker
+            if (marker) {
+                marker.setMap(null);
+                marker = null;
+            }
+          marker = createMarker(event.latLng, "name", "<b>Location</b><br>"+event.latLng);
+        });
+
+    }
+    
+    google.maps.event.addDomListener(window, 'load', initialize);
+
+  
+    $(document).ready(function(){
+        $("#add_address").click(function() {
+            $("#address").show(250);
+            $('#map').hide();
+        });
+        $('#confirm_address').click(function() {
+            $('#address').hide();
+            if ($('#enter_address').val() == '') return;
+            $("#addresses_panel").append('<div class="row">'+
+                '<div class="col-xs-12">'+
+                  '<div class="alert alert-info alert-dismissable">'+
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                    '<strong>' + $("#enter_address").val() + '</strong>' +
+                    '<input name="address[]" type="hidden" disabled="true" value="' + $("#enter_address").val() + '">' +
+                  '</div> '+
+                '</div>'+
+              '</div>');
+            $("#submit").show();
+        });
+        $("#place_on_map").click(function() {
+            $('#map').show(250);
+            setTimeout(function(){$(window).resize();}, 300 );
+            $('#address').hide(); 
+        });
+
+        $('#confirm_map').click(function() {
+            $('#map').hide();
+            var lat = marker.getPosition().lat();
+            var lng = marker.getPosition().lng();
+            if (lat == '' || lng == '') return;
+            $("#addresses_panel").append('<div class="row">'+
+                '<div class="col-xs-12">'+
+                  '<div class="alert alert-info alert-dismissable">'+
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>'+
+                    '<strong>' + lat + '' + lng + '</strong>' +
+                    '<input name="address[]" type="hidden" disabled="true" value="' + lat + '' + lng + '">' +
+                  '</div> '+
+                '</div>'+
+              '</div>');
+            $("#submit").show();
+        });
+
     });
-});
+    </script>
 
-</script>
-
-
-<!--show box for one friend's name with options to input address-->
-<div class="row">
-  <div class="col-xs-12">
-    <div class="alert alert-info alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-      <strong>Jack Piper</strong>
-   <a class="btn-primary btn-xs pull-right" href="#">Place on map</a>
- <a class="btn-primary btn-xs pull-right" href="#">Enter address</a>    
- </div> 
-</div>
+<div id="buttons" class="centerize">
+    <a class="btn-primary btn" id="place_on_map">Place on map</a>
+    <a class="btn-primary btn" id="add_address">Enter address</a>
 </div>
 
-<!--text input for friend's address-->
+<div id="address" class="centerize" style="display:none;">
+  <input type="text" id="enter_address" placeholder="Enter an address">
+  <a class="btn btn-primary" id="confirm_address">Confirm</a>
+</div>      
 
-<div class="row">
-  <div class="col-xs-12">
-    <input class="form-control" id="inputName" placeholder="Enter the address your friend is coming from">
-    <input type="submit" id="textaddress" class="btn btn-primary" value="Add Address">
-  </div>
+<div id="map" class="centerize" style="display:none;">
+  <div id="map-canvas" style="width: 550px; height: 450px" style="float: center"></div>
+  <a class="btn btn-primary" id="confirm_map">Confirm</a>
 </div>
+<form method="post">
+  <div id="addresses_panel"></div>
+  <input class="btn btn-primary" type="submit" id="submit" value="Submit"  style="display:none;">
+</form>
 
-<!--Google map area-->
-<div class="row">
-  <div class="col-xs-12">
-    <div style="color:0;border-radius:15px;min-height:500px;">
-    </div>
-  </div>
-</div>
-
-</div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="static/js/bootstrap.min.js"></script>
-    <script src="static/js/docs.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="static/js/ie10-viewport-bug-workaround.js"></script>
-  </body>
-</html>
+{% endblock %}
