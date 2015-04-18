@@ -1,0 +1,14 @@
+<html>
+    <body>
+    {{string}}
+        <form action="/form" method="post">
+            <p>Address 1</p><input type="text" name="address[]">
+            <p>Address 2</p><input type="text" name="address[]">
+            <br>
+            <input type="submit" value="Submit">
+        </form>
+    </body>
+    <script type="text/javascript">
+        console.log("{{string}}");
+    </script>
+</html>

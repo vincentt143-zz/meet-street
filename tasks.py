@@ -1,5 +1,4 @@
-import json
-import urllib2
+import json, urllib2
 from numpy import *
 from scipy.spatial import ConvexHull
 
@@ -13,9 +12,7 @@ def getLocationName(lat, lng):
   response = json.loads(response)
   return response["results"][0]["formatted_address"]
 
-
-
-def getPointsOfInterest(lat, lng, type, radius = "500m"):
+def getPointsOfInterest(lat, lng, type = "food", radius = "500"):
   response = urllib2.urlopen("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + str(lat) + "," + str(lng) + "&radius=" + str(radius) + "&types=" + type + "&key=AIzaSyDdrdJXlBA9SvDFpV2ySAS0RkUvaGb7lAU").read()
   response = json.loads(response)
   for poi in response["results"]:
@@ -38,9 +35,10 @@ def findMidpoint(coordinates):
   midpoint = [Xaverage, Yaverage]
   return midpoint
 
-# getLocationName(-33.9174103,151.2313068)
-getPointsOfInterest(-33.8670522, 151.1957362, "food", 500)
-# location=-33.8670522,151.1957362&radius=500&types=food&name=cruise
+def getDetails(place_id):
+  response = urllib2.urlopen("https://maps.googleapis.com/maps/api/place/details/json?placeid=" + place_id + "&key=AIzaSyDdrdJXlBA9SvDFpV2ySAS0RkUvaGb7lAU").read()
+  response = json.loads(response)
+  return response["result"]
 
 #return a 1d array that has the first x, y, then the next x,y and then the next x,y counterclockwise
 
@@ -49,6 +47,5 @@ def getConvexHullPoints(coordinates):
   returnableCoordinates = []
   hullVertices = hull.vertices
   for index in hullVertices:
-    for coord in hull.points[index]:
-      returnableCoordinates.append(coord)
+    returnableCoordinates.append(hull.points[index])
   return returnableCoordinates

@@ -3,7 +3,8 @@ from __future__ import with_statement
 from sqlite3 import dbapi2 as sqlite3
 from contextlib import closing
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
-import string, random, socket, logging
+import string, random, socket, logging, json
+from tasks import *
 
 # create our little application :)
 app = Flask(__name__)
@@ -14,10 +15,33 @@ if not app.config['DEBUG']:
   app.logger.setLevel(logging.WARNING)
   app.logger.addHandler(file_handler)
 
-
 @app.route('/')
 def index():
   return render_template('index.html')
+
+@app.route('/maps')
+def maps():
+  addresses = ["UNSW", "Wynyard+Sydney", "Burwood+Sydney", "Chatswood"]
+  coords = []
+  for addr in addresses:
+    coords.append(getCoordinates(addr))
+  coords = getConvexHullPoints(coords)
+  centroid = findMidpoint(coords)
+  locations = getPointsOfInterest(centroid[0], centroid[1])
+  # Only return top 4 results
+  locations = locations[:4]
+  for location in locations:
+    location["details"] = getDetails(location["place_id"])
+  return render_template('maps.html', coords=coords, locations=locations, centroid=centroid)
+
+@app.route('/form', methods=['POST', 'GET'])
+def form():
+  if request.method == 'POST':
+    addresses = request.form.getlist("address[]")
+    for address in addresses:
+      print getCoordinates(address)
+  string = "blah"
+  return render_template('form.html', string=string)
 
 if __name__ == '__main__':
   app.run()

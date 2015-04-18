@@ -3,14 +3,13 @@ meet-street
 ## Developer setup for Ubuntu
 ###Core packages
 ```
-$ sudo apt-get install git pip
-$ sudo apt-get install python-numpy python-scipy python-matplotlib ipython ipython-notebook python-pandas python-sympy python-nose
+$ sudo apt-get install git python-pip python-dev libevent-dev libblas-dev liblapack-dev gfortran
 ```
 
 ###Setting up virtualenv
 This is only necessay if you work on a lot of Python projects. It's mainly to deal with package dependencies. It's not completely necessary, but its a good habit.
 ```
-$ sudo apt-get install virtualenv
+$ sudo apt-get install python-virtualenv
 $ virtualenv <environment_name>
 $ . <environment_name>/bin/activate
 ```
@@ -23,6 +22,7 @@ $ git clone git@github.com:vincentt143/meet-street.git
 $ cd meet-street
 $ echo "export MEET_STREET_CONFIG=development_config.py" >> ~/.bashrc
 $ bash
+$ pip install --upgrade pip
 $ pip install -r requirements.txt
 ```
 ### Running the server
